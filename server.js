@@ -5,8 +5,8 @@ const pool=require("./config/db")
 const PORT= process.env.PORT || 5000;
 (async ()=>{
     try{
-        await pool.query("SELECT 1");
-        console.log("DB connection verified");
+        const res= await pool.query("SELECT current_database()");
+        console.log("DB connection verified", res.rows[0].current_database);
 
 
         app.listen(PORT, ()=>{
@@ -14,5 +14,6 @@ const PORT= process.env.PORT || 5000;
         });
     }catch(error){
         console.error("DB connection failed:", error.message);
+        process.exit(1);
     }
 }) ();
