@@ -9,4 +9,4 @@ router.route('/signup').post(signup)
 router.route('/login').post(login)
 router.route('/getme').get(authMiddleware,getMe)
 
-module.exports=router
+module.exports=router;
