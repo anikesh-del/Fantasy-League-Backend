@@ -1,27 +1,15 @@
-const {
-  fetchBootstrapStatic,
-  normalizePlayers,
-} = require("../services/stats.sync.service");
+const { syncAll } = require("../services/stats.sync.services");
 
-const { bulkUpsertPlayers } = require("../models/player.model");
-
-const syncPlayers = async (req, res) => {
-  
-  const bootstrapData = await fetchBootstrapStatic();
-
-  
-  const players = normalizePlayers(bootstrapData);
-
-  
-  await bulkUpsertPlayers(players);
+const runSync = async (req, res) => {
+  const result = await syncAll();
 
   res.status(200).json({
     success: true,
-    message: "Players synced successfully",
-    count: players.length,
+    data: {
+      message: "Sync completed successfully",
+      counts: result,
+    },
   });
 };
 
-module.exports = {
-  syncPlayers,
-};
+module.exports = { runSync };
