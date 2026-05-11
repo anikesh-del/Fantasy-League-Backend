@@ -57,4 +57,15 @@ async function bulkUpsertPlayers(players) {
   await pool.query(query, values);
 }
 
-module.exports = { bulkUpsertPlayers };
+
+async function getPlayerById(playerId) {
+  const result = await pool.query(
+    `SELECT id, price, position FROM players WHERE id = $1`,
+    [playerId]
+  );
+  return result.rows[0] || null;
+}
+module.exports = { 
+  bulkUpsertPlayers,
+  getPlayerById
+ };

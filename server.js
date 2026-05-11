@@ -7,8 +7,6 @@ const PORT= process.env.PORT || 5000;
     try{
         const res= await pool.query("SELECT current_database()");
         console.log("DB connection verified", res.rows[0].current_database);
-
-
         app.listen(PORT, ()=>{
             console.log(`server running on port ${PORT}`);
         });

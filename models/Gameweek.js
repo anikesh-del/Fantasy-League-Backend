@@ -52,4 +52,5 @@ const getCurrentGameweek = async () => {
 
 module.exports = { 
     bulkUpsertGameweeks, 
-    getCurrentGameweek };
+    getCurrentGameweek 
+  };

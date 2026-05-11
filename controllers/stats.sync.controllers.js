@@ -1,4 +1,8 @@
-const { syncAll } = require("../services/stats.sync.services");
+const { 
+  syncAll, 
+  syncPlayerGameweekStats 
+} = require("../services/stats.sync.services");
+const ApiError = require("../errors/ApiError");
 
 const runSync = async (req, res) => {
   const result = await syncAll();
@@ -12,4 +16,25 @@ const runSync = async (req, res) => {
   });
 };
 
-module.exports = { runSync };
+
+const runPlayerGameweekSync = async (req, res) => {
+  const { gameweek_id } = req.params;
+
+  if (!gameweek_id || isNaN(gameweek_id)) {
+    throw new ApiError(400, "Invalid gameweek_id");
+  }
+
+  const result = await syncPlayerGameweekStats(parseInt(gameweek_id));
+
+  res.status(201).json({
+    success: true,
+    data: {
+      message: `Gameweek ${gameweek_id} stats synced successfully`,
+      counts: result,
+    },
+  });
+};
+
+module.exports = { runSync,
+  runPlayerGameweekSync,
+ };

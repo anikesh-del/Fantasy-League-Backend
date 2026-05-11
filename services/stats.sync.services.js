@@ -2,10 +2,14 @@ const axios = require("axios");
 const Team = require("../models/Team");
 const Gameweek = require("../models/Gameweek");
 const Fixture = require("../models/Fixture");
-const { bulkUpsertPlayers } = require("../models/player");
+const { bulkUpsertPlayers } = require("../models/Player");
+const { bulkUpsertPlayerGameweekStats } = require("../models/PlayerGameweekStats");
+const pool = require("../config/db");
+const ApiError = require("../errors/ApiError");
 
 const BOOTSTRAP_URL = "https://fantasy.premierleague.com/api/bootstrap-static/";
 const FIXTURES_URL = "https://fantasy.premierleague.com/api/fixtures/";
+const GAMEWEEK_LIVE_URL = "https://fantasy.premierleague.com/api/event";
 
 // ─── Fetchers ────────────────────────────────────────────
 
@@ -19,6 +23,15 @@ const fetchFixtures = async () => {
   return response.data;
 };
 
+const fetchGameweekLive=async(gameweekId)=>{
+  try{
+    const response=await axios.get(`${GAMEWEEK_LIVE_URL}/${gameweekId}/live/`);
+    return response.data.elements;
+  }catch(error){
+    console.error(`Failed to fetch gameweek ${gameweekId}:`, error.message);
+    throw error;
+  }
+};
 // ─── Normalizers ─────────────────────────────────────────
 
 const normalizeTeams = (bootstrapData) => {
@@ -74,6 +87,21 @@ const normalizeFixtures = (fixturesData) => {
   }));
 };
 
+const normalizeGameweekLiveData=(elements, gameweekId)=>{
+  return elements.map((el)=>({
+    playerId: el.id,
+    gameweekId: gameweekId,
+    minutes: el.stats.minutes,
+    goals: el.stats.goals_scored,
+    assists: el.stats.assists,
+    cleanSheets: el.stats.clean_sheets,
+    goalsConceded: el.stats.goals_conceded,
+    yellowCards: el.stats.yellow_cards,
+    redCards: el.stats.red_cards,
+    saves: el.stats.saves,
+    totalPoints: el.stats.total_points,
+  }));
+};
 // ─── Main sync ───────────────────────────────────────────
 
 const syncAll = async () => {
@@ -106,8 +134,41 @@ const syncAll = async () => {
   };
 };
 
+// ─── Sync player gameweek stats (FAST VERSION) ───────────
+const syncPlayerGameweekStats=async (gameweekId) =>{
+
+  const {rows:gwrows }=await pool.query(
+     "SELECT id FROM gameweeks WHERE id = $1",
+    [gameweekId]
+  );
+
+  if(gwrows.length==0){
+    throw new ApiError(404, `Gameweek ${gameweekId} not found`);
+  }
+
+  console.log(`Fetching gameweek ${gameweekId} live data...`);
+
+  const elements=await fetchGameweekLive(gameweekId);
+    console.log(`Received data for ${elements.length} players`);
+
+    const statsForGameweek=normalizeGameweekLiveData(elements,gameweekId);
+      console.log(`Inserting ${statsForGameweek.length} stats for gameweek ${gameweekId}...`);
+
+        // Bulk insert
+  if (statsForGameweek.length > 0) {
+    await bulkUpsertPlayerGameweekStats(statsForGameweek);
+  }
+
+  return {
+    gameweekId,
+    playersProcessed: elements.length,
+    statsInserted: statsForGameweek.length,
+  };
+};
+
 module.exports = {
   syncAll,
+  syncPlayerGameweekStats,
   fetchBootstrapStatic,
   normalizeTeams,
   normalizeGameweeks,

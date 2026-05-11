@@ -7,7 +7,7 @@ const bulkUpsertFixtures = async (fixtures) => {
   let placeholders = [];
 
   fixtures.forEach((f, i) => {
-    const base = i * 7;
+    const base = i *8;
     placeholders.push(`(
       $${base + 1}, $${base + 2}, $${base + 3}, $${base + 4},
       $${base + 5}, $${base + 6}, $${base + 7}, $${base+ 8}

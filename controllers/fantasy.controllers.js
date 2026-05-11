@@ -1,22 +1,22 @@
 const fantasyService = require("../services/fantasy-services");
 
-const createFantasyTeam=async(req,res)=>{
-    const userId=req.user.user_id;
-    const {team_name}=req.body;
+const createFantasyTeam = async (req, res) => {
+  const userId = req.user.user_id;
+  const { team_name } = req.body;
 
-      const team = await fantasyService.createFantasyTeam({
+  const team = await fantasyService.createFantasyTeam({
     userId,
     teamName: team_name,
   });
 
   res.status(201).json({
-    success:true,
-    data:team,
+    success: true,
+    data: team,
   });
 };
 
-const viewFantasyTeam=async(req,res)=>{
-    const userId=req.user.user_id;
+const viewFantasyTeam = async (req, res) => {
+  const userId = req.user.user_id;
   const team = await fantasyService.getFantasyTeam(userId);
 
   res.status(200).json({
@@ -26,29 +26,29 @@ const viewFantasyTeam=async(req,res)=>{
 
 };
 
-const addPlayer=async(req,res)=>{
-    const userId=req.user.user_id;
-      const { player_api_id, position } = req.body;
+const addPlayer = async (req, res) => {
+  const userId = req.user.user_id;
+  const { player_api_id, position } = req.body;
 
-      const player=await fantasyService.addPlayer({
-        userId,
-        player_api_id,
-        position,
-      });
+  const player = await fantasyService.addPlayer({
+    userId,
+    player_api_id,
+    position,
+  });
 
-      res.status(201).json({
-        success:true,
-        data:player,
-      });
+  res.status(201).json({
+    success: true,
+    data: player,
+  });
 };
 
 const removePlayer = async (req, res) => {
   const userId = req.user.user_id;
   const { player_api_id } = req.params;
 
-  await fantasyService.removePlayerFromTeam({
+  await fantasyService.removePlayer({
     userId,
-    player_api_id: Number(player_api_id),
+    player_api_id
   });
 
   res.status(200).json({
