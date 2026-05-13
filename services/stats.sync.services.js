@@ -11,6 +11,10 @@ const BOOTSTRAP_URL = "https://fantasy.premierleague.com/api/bootstrap-static/";
 const FIXTURES_URL = "https://fantasy.premierleague.com/api/fixtures/";
 const GAMEWEEK_LIVE_URL = "https://fantasy.premierleague.com/api/event";
 
+
+const CacheService = require('./cache.service');
+const KEYS = require('../utils/cacheKeys');
+const TTL = { BOOTSTRAP: 3600, TEAM: 300, LEADERBOARD: 300 };
 // ─── Fetchers ────────────────────────────────────────────
 
 const fetchBootstrapStatic = async () => {
@@ -106,7 +110,13 @@ const normalizeGameweekLiveData=(elements, gameweekId)=>{
 
 const syncAll = async () => {
   // Single bootstrap call — reuse for teams, gameweeks, players
-  const bootstrapData = await fetchBootstrapStatic();
+ 
+    const bootstrapData = await CacheService.cacheAside(
+    KEYS.BOOTSTRAP,
+    TTL.BOOTSTRAP,
+    fetchBootstrapStatic 
+  );
+
   const fixturesData = await fetchFixtures();
 
   // Order matters — teams and gameweeks before players and fixtures

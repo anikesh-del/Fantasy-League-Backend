@@ -6,6 +6,12 @@ const Gameweek = require('../models/Gameweek');
 
 const POSITION_MAP = { 1: "GK", 2: "DEF", 3: "MID", 4: "FWD" };
 
+const CacheService = require('./cache.service');
+const KEYS = require('../utils/cacheKeys');
+
+const TTL = {
+  TEAM: 300,
+};
 
 //to check the deadline
 const checkDeadline = async () => {
@@ -38,6 +44,14 @@ const createFantasyTeam = async ({ userId, teamName }) => {
 };
 
 const getFantasyTeam = async (userId) => {
+
+  return CacheService.cacheAside(
+    KEYS.fantasyTeam(userId),
+    TTL.TEAM,
+    async()=>{
+      
+    }
+  );
   const team = await FantasyTeam.getTeamByUserId(userId);
   if (!team) {
     throw new ApiError(404, "Fantasy team does not exist");
@@ -50,7 +64,7 @@ const getFantasyTeam = async (userId) => {
   const formattedPlayers = players.map((p) => ({
     ...p,
     position: POSITION_MAP[p.position] ?? p.position,
-  }));
+  })); 
 
   return {
     ...team,

@@ -6,7 +6,7 @@ async function getLeaderboardServices({gameweekId, page , limit}){
     const offset=(page-1)*limit;
 
     const [entries, total]=await Promise.all([
-        getLEaderboard({gameweekId, limit , offset}),
+        getLeaderboard({gameweekId, limit , offset}),
         getLeaderboardCount({gameweekId}),
     ]);
 
