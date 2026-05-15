@@ -1,5 +1,6 @@
 const { settleGameweek } = require("../services/settlement.services");
 const ApiError = require("../errors/ApiError");
+const { settlementQueue } = require('../queues');
 
 const runSettlement = async (req, res) => {
   const { gameweek_id } = req.params;
@@ -16,16 +17,15 @@ const runSettlement = async (req, res) => {
   }
 
   // Call service to settle
-  const result = await settleGameweek(gameweekId);
+   const job = await settlementQueue.add(
+    'settle',
+    { gameweekId }
+  );
 
-  res.status(200).json({
+  res.status(202).json({
     success: true,
-    data: {
-      message: `Gameweek ${gameweekId} settled successfully`,
-      gameweek_id: result.gameweek_id,
-      users_settled: result.user_settled,
-      total_users: result.total_users,
-    },
+    message: `Settlement job queued for GW ${gameweekId}`,
+    jobId: job.id,
   });
 };
 
