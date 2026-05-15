@@ -118,7 +118,7 @@ const syncAll = async () => {
   );
 
   const fixturesData = await fetchFixtures();
-
+  
   // Order matters — teams and gameweeks before players and fixtures
   const teams = normalizeTeams(bootstrapData);
   await Team.bulkUpsertTeams(teams);
