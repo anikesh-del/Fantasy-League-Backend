@@ -17,13 +17,13 @@ const getLeaderboardSchema = z.object({
       .regex(/^\d+$/, 'page must be a number')
       .transform(val => parseInt(val, 10))
       .refine(val => val > 0, 'page must be a positive integer')
-      .default('1'),
+      .default(1),
     limit: z
       .string()
       .regex(/^\d+$/, 'limit must be a number')
       .transform(val => parseInt(val, 10))
       .refine(val => val > 0 && val <= 100, 'limit must be between 1 and 100')
-      .default('50'),
+      .default(50),
   }),
 });
 

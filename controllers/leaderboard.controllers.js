@@ -3,10 +3,10 @@ const ApiError = require('../errors/ApiError');
 
 async function getGameweekLeaderboard(req,res, next) {
     try{
-        const {gameweek , page='1', limit='50'}=req.query;
+        const {gameweek , page, limit}=req.query;
 
         const data= await getLeaderboardServices({
-            gameweekId: parsedGameweek , 
+            gameweekId: gameweek , 
             page:parsedPage,
             limit: parsedLimit,
         });

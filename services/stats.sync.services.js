@@ -16,6 +16,8 @@ const CacheService = require('./cache.services');
 const KEYS = require('../utils/cacheKeys');
 const TTL = { BOOTSTRAP: 3600, TEAM: 300, LEADERBOARD: 300 };
 
+const ELEMENT_TYPE_MAP = { 1: 'GKP', 2: 'DEF', 3: 'MID', 4: 'FWD' };
+
 //Fetchers 
 const fetchBootstrapStatic = async () => {
   const response = await axios.get(BOOTSTRAP_URL);
@@ -66,7 +68,7 @@ const normalizePlayers = (bootstrapData) => {
     secondName: p.second_name,
     webName: p.web_name,
     teamId: p.team,
-    position: p.element_type,
+    position: ELEMENT_TYLE_MAP[p.element_type],
     price: p.now_cost / 10,
     totalPoints: p.total_points,
     goals: p.goals_scored,

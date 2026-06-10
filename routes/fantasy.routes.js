@@ -10,6 +10,9 @@ const {
 
 const { getLeaderboardSchema } = require('../schemas/leaderboard.schemas');
 
+const {getPointsSchema}=require("../schemas/points.schemas");
+
+
 const authMiddleware = require('../middlewares/auth.middleware');
 
 const {
@@ -25,21 +28,22 @@ const { getFantasyTeamPoints }=require("../controllers/points.controller");
 const { getGameweekLeaderboard } = require('../controllers/leaderboard.controllers');
 
 
-router.get("/points",authMiddleware, getFantasyTeamPoints);
+router.get("/points",authMiddleware, validate(getPointsSchema),getFantasyTeamPoints);
 
 router.get('/leaderboard', authMiddleware,  validate(getLeaderboardSchema), getGameweekLeaderboard);
 
 router
   .route('/team')
-  .post(authMiddleware,validate(createFantasyTeamSchema), createFantasyTeam)
+  .post(authMiddleware,
+    validate(createFantasyTeamSchema), createFantasyTeam)
   .get(authMiddleware, viewFantasyTeam);
 
 router.post('/team/players', authMiddleware, validate(addPlayerSchema),addPlayer);
 
 router.delete(
   '/team/players/:player_api_id',
-  validate(removePlayerSchema),
   authMiddleware,
+  validate(removePlayerSchema),
   removePlayer
 );
 

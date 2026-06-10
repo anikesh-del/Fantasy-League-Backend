@@ -1,5 +1,5 @@
 
-const { calculateFantasyTeamPoints } = require("../services/points.services")
+const { calculateFantasyTeamPoints } = require("./points.services")
 const { bulkInsertUserGameweekPoints } = require("../models/User_gameweek_points");
 const pool = require("../config/db");
 const ApiError = require("../errors/ApiError");
