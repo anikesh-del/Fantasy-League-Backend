@@ -3,13 +3,13 @@ const { syncAll, syncPlayerGameweekStats } = require('../services/stats.sync.ser
 const { getCurrentGameweek } = require('../models/Gameweek');
 const redis = require('../config/redis');
 
-const connection = new redis({
+const connection = {
   host: process.env.REDIS_HOST || 'localhost',
-  port: process.env.REDIS_PORT || 6379,
+  port: Number(process.env.REDIS_PORT) || 6379,
   password: process.env.REDIS_PASSWORD || undefined,
-});
+};
 
-const syncworker= new Worker('sync' , async(job)=>{
+const syncWorker= new Worker('sync' , async(job)=>{
     if(job.name=='syncAll'){
        console.log('[SyncWorker] Running full sync...');
     const result = await syncAll();

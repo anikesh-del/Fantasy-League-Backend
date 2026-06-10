@@ -117,7 +117,7 @@ async function getSquadSummary(fantasyTeamId){
   return {
     total_players : parseInt(row.total_players, 10),
     total_cost    : parseFloat(row.total_cost),
-    gk_count      : parseInt(row.gkp_count, 10),
+    gkp_count      : parseInt(row.gkp_count, 10),
     def_count     : parseInt(row.def_count, 10),
     mid_count     : parseInt(row.mid_count, 10),
     fwd_count     : parseInt(row.fwd_count, 10),

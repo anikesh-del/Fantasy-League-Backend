@@ -40,7 +40,7 @@ const getLeaderboard=async({gameweekId,limit,offset})=>{
     if(gameweekId){
         query=`
         SELECT 
-        RANK() OVER (ORDER BY ugp.points DESC) AS rank
+        RANK() OVER (ORDER BY ugp.points DESC) AS rank,
         u.username, ft.team_name,ugp.points
         FROM user_gameweek_points ugp
         INNER JOIN users u ON u.user_id=ugp.user_id
@@ -84,7 +84,7 @@ async function getLeaderboardCount({ gameweekId }) {
 }
 
 module.exports={
-     bulkUpsertTeams,
+    bulkInsertUserGameweekPoints,
      getLeaderboard,
      getLeaderboardCount
 }

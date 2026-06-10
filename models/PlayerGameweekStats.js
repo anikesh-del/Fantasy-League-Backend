@@ -12,7 +12,7 @@ const bulkUpsertPlayerGameweekStats=async(stats)=>{
         placeholders.push(`(
       $${base+1}, $${base+2}, $${base + 3}, $${base + 4},
       $${base + 5}, $${base + 6}, $${base + 7}, $${base + 8},
-      $${base + 9}, $${base + 10}, $${base + 11}
+      $${base + 9}, $${base + 10}, $${base + 11}, $${base+12}
             )`);
         values.push(
 
@@ -26,6 +26,7 @@ const bulkUpsertPlayerGameweekStats=async(stats)=>{
       s.yellowCards,
       s.redCards,
       s.saves,
+      s.bonus,
       s.totalPoints
         ) ;   
     });
@@ -34,7 +35,7 @@ const bulkUpsertPlayerGameweekStats=async(stats)=>{
     INSERT INTO player_gameweek_stats(
       player_id, gameweek_id, minutes, goals, assists,
       clean_sheets, goals_conceded, yellow_cards, red_cards,
-      saves, total_points
+      saves,bonus, total_points
     )
       VALUES ${placeholders.join(",")}
       ON CONFLICT (player_id, gameweek_id) DO UPDATE SET
@@ -46,6 +47,7 @@ const bulkUpsertPlayerGameweekStats=async(stats)=>{
       yellow_cards = EXCLUDED.yellow_cards,
       red_cards = EXCLUDED.red_cards,
       saves = EXCLUDED.saves,
+      bonus = EXCLUDED.bonus,
       total_points = EXCLUDED.total_points,
       updated_at = CURRENT_TIMESTAMP;
     `;

@@ -2,7 +2,9 @@
 const { calculateFantasyTeamPoints } = require("../services/points.services")
 const { bulkInsertUserGameweekPoints } = require("../models/User_gameweek_points");
 const pool = require("../config/db");
-const APiError = require("../errors/ApiError");
+const ApiError = require("../errors/ApiError");
+const CacheService = require('../services/cache.services');
+
 
 const settleGameweek = async (gameweek_id) => {
 
@@ -13,6 +15,10 @@ const settleGameweek = async (gameweek_id) => {
   if (gameweekRows.length === 0) {
     throw new ApiError(404, `Gameweek ${gameweek_id} not found`);
   }
+  
+if (!gameweekRows[0].is_finished) {
+  throw new ApiError(400, `Gameweek ${gameweek_id} is not finished yet`);
+}
 
   console.log(`Starting settlement for gameweek ${gameweek_id}...`);
 
@@ -71,7 +77,7 @@ const settleGameweek = async (gameweek_id) => {
 
   return {
     gameweek_id,
-    user_settled: userGameweekData.length,
+    users_settled: userGameweekData.length,
     total_users: users.length
   };
 };

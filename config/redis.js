@@ -1,9 +1,9 @@
-import Redis from 'ioredis';
-import 'dotenv/config';
+require('dotenv').config();
+const Redis= require('ioredis');
 
 const client = new Redis({
     host: process.env.REDIS_HOST || 'localhost',
-    port: process.env.REDIS_PORT || 6379,
+    port: Number(process.env.REDIS_PORT) || 6379,
     password: process.env.REDIS_PASSWORD || undefined,
 
     retryStrategy(times){
@@ -13,10 +13,9 @@ const client = new Redis({
 
     enableOfflineQueue:true,
 
-     lazyConnect: true,
+    lazyConnect: true,
 
-     keyPrefix:'myapp',
-  
+     keyPrefix: 'myapp:',  
 });
 
 client.on('connect', () => {
@@ -24,7 +23,7 @@ client.on('connect', () => {
 });
 
 client.on('error', (err) => {
-  console.error('[Redis] Error connecting to Redis:', err);
+  console.error('[Redis] Error connecting to Redis:', err.message);
 });
 
 client.on('reconnecting', () => {
@@ -35,4 +34,4 @@ client.on('end', () => {
   console.log('[Redis] Disconnected from Redis');
 });
 
-export default client;  
+module.exports= client;  

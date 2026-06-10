@@ -3,8 +3,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const ApiError = require("../errors/ApiError");
 
-const signup = async ({ username, email, password }) => {
-  const existingUser = await User.findUserByEmail(email);
+const signup = async ({ username, email_id, password }) => {
+  const existingUser = await User.findUserByEmail(email_id);
   if (existingUser) {
     throw new ApiError(409, "User already exists");
   }
@@ -13,7 +13,7 @@ const signup = async ({ username, email, password }) => {
 
   const user = await User.createUser({
     username,
-    email_id: email,
+    email_id,
     password: hashedPassword,
   });
 
@@ -33,8 +33,8 @@ const signup = async ({ username, email, password }) => {
   };
 };
 
-const login = async ({ email, password }) => {
-  const user = await User.findUserByEmail(email);
+const login = async ({ email_id, password }) => {
+  const user = await User.findUserByEmail(email_id);
   if (!user) {
     throw new ApiError(401, "Invalid credentials");
   }

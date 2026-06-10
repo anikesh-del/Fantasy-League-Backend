@@ -1,10 +1,10 @@
 const authService = require("../services/auth.services");
 
 const signup= async(req, res)=>{
-    const{username, email, password }=req.body;
+    const{username, email_id, password }=req.body;
 
     const result =await authService.signup({
-        username , email , password
+        username , email_id , password
     });
 
     res.status(201).json({
@@ -14,10 +14,10 @@ const signup= async(req, res)=>{
 };
 
 const login= async(req,res)=>{
- const{email,password}=req.body;
+ const{email_id,password}=req.body;
 
  const result= await authService.login({
-    email, password,
+    email_id, password,
  });
 
  res.status(200).json({

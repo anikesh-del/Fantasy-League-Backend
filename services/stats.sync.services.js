@@ -15,8 +15,8 @@ const GAMEWEEK_LIVE_URL = "https://fantasy.premierleague.com/api/event";
 const CacheService = require('./cache.service');
 const KEYS = require('../utils/cacheKeys');
 const TTL = { BOOTSTRAP: 3600, TEAM: 300, LEADERBOARD: 300 };
-// ─── Fetchers ────────────────────────────────────────────
 
+//Fetchers 
 const fetchBootstrapStatic = async () => {
   const response = await axios.get(BOOTSTRAP_URL);
   return response.data;
@@ -36,7 +36,7 @@ const fetchGameweekLive=async(gameweekId)=>{
     throw error;
   }
 };
-// ─── Normalizers ─────────────────────────────────────────
+// Normalizers 
 
 const normalizeTeams = (bootstrapData) => {
   return bootstrapData.teams.map((t) => ({
@@ -103,10 +103,11 @@ const normalizeGameweekLiveData=(elements, gameweekId)=>{
     yellowCards: el.stats.yellow_cards,
     redCards: el.stats.red_cards,
     saves: el.stats.saves,
+    bonus: el.stats.bonus ?? 0,
     totalPoints: el.stats.total_points,
   }));
 };
-// ─── Main sync ───────────────────────────────────────────
+//Main sync 
 
 const syncAll = async () => {
   // Single bootstrap call — reuse for teams, gameweeks, players
@@ -144,7 +145,7 @@ const syncAll = async () => {
   };
 };
 
-// ─── Sync player gameweek stats (FAST VERSION) ───────────
+//Sync player gameweek stats (FAST VERSION) 
 const syncPlayerGameweekStats=async (gameweekId) =>{
 
   const {rows:gwrows }=await pool.query(

@@ -1,6 +1,6 @@
 const { getLeaderboard, getLeaderboardCount } = require('../models/User_gameweek_points');
 
-const CacheService = require('./cache.service');
+const CacheService = require('./cache.services');
 const KEYS = require('../utils/cacheKeys');
 
 const APIError = require('../errors/ApiError');

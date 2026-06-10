@@ -1,6 +1,7 @@
+
 const redis = require('../config/redis.js');
 
-export function slidingWindowLimiter({
+function slidingWindowLimiter({
     windowMs = 60000,
     max = 10,
     keyPrefix = 'rl:sw',
@@ -40,30 +41,32 @@ export function slidingWindowLimiter({
             local resetAt = tonumber(oldest[2]) + (now - windowStart)
             return {1, count + 1, resetAt}
     `;
-       try{
-        const [allowed, currentCount,resetAtMs] = await redis.eval(luascript, 1, key, windowStart, ttlSeconds, max, now, member);
+        try {
+            const [allowed, currentCount, resetAtMs] = await redis.eval(luascript, 1, key, windowStart, ttlSeconds, max, now, member);
 
-        const remaining = Math.max(0, max - currentCount);
+            const remaining = Math.max(0, max - currentCount);
 
-        res.set({
-            'X-RateLimit-Limit': max,
-            'X-RateLimit-Remaining': remaining,
-            'X-RateLimit-Reset': Math.ceil((resetAtMs)/1000), // Unix epoch
-        });
-
-        if (!allowed) {
-            const retryAfter= Math.ceil((resetAtMs-now)/1000);
-            res.set('Retry-After', retryAfter);
-            return res.status(429).json({
-                error: 'Too Many Requests',
-                retryAfter,
+            res.set({
+                'X-RateLimit-Limit': max,
+                'X-RateLimit-Remaining': remaining,
+                'X-RateLimit-Reset': Math.ceil(resetAtMs / 1000), // Unix epoch
             });
-        }
 
-        next();
-    }catch(err){
-        console.error('[rate-limiter] Redis error:', err);
+            if (!allowed) {
+                const retryAfter = Math.max(1, Math.ceil((resetAtMs - now) / 1000));
+                res.set('Retry-After', retryAfter);
+                return res.status(429).json({
+                    error: 'Too Many Requests',
+                    retryAfter,
+                });
+            }
+
             next();
-    }
+        } catch (err) {
+            console.error('[rate-limiter] Redis error:', err);
+            return res.status(503).json({ error: 'Service Unavailable' });
+        }
     };
 }
+
+module.exports = slidingWindowLimiter;
