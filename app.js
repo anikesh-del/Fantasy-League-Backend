@@ -1,5 +1,6 @@
 require('express-async-errors');
 const express=require("express");
+const helmet = require('helmet');
 const app=express();
 
 const authRouter=require('./routes/auth.routes');
@@ -11,6 +12,7 @@ const rateLimiter = require('./middlewares/rateLimiter.middleware');
 
 const errorHandler=require('./middlewares/error.middleware');
 
+app.use(helmet());
 app.use(express.json());
 
 app.use('/api/v1/auth', authRouter);

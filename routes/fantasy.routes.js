@@ -7,6 +7,9 @@ const {
   removePlayerSchema,
   updateCaptainSchema,
 } = require('../schemas/fantasy.schemas');
+
+const { getLeaderboardSchema } = require('../schemas/leaderboard.schemas');
+
 const authMiddleware = require('../middlewares/auth.middleware');
 
 const {
@@ -24,7 +27,7 @@ const { getGameweekLeaderboard } = require('../controllers/leaderboard.controlle
 
 router.get("/points",authMiddleware, getFantasyTeamPoints);
 
-router.get('/leaderboard', authMiddleware, getGameweekLeaderboard);
+router.get('/leaderboard', authMiddleware,  validate(getLeaderboardSchema), getGameweekLeaderboard);
 
 router
   .route('/team')

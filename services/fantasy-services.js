@@ -6,7 +6,7 @@ const Gameweek = require('../models/Gameweek');
 
 const POSITION_MAP = { 1: "GKP", 2: "DEF", 3: "MID", 4: "FWD" };
 
-const CacheService = require('./cache.service');
+const CacheService = require('./cache.services');
 const KEYS = require('../utils/cacheKeys');
 
 const TTL = {

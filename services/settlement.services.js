@@ -3,7 +3,7 @@ const { calculateFantasyTeamPoints } = require("../services/points.services")
 const { bulkInsertUserGameweekPoints } = require("../models/User_gameweek_points");
 const pool = require("../config/db");
 const ApiError = require("../errors/ApiError");
-const CacheService = require('../services/cache.services');
+const CacheService = require('./cache.services');
 
 
 const settleGameweek = async (gameweek_id) => {
