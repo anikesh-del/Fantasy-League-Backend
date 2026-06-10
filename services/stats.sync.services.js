@@ -68,7 +68,7 @@ const normalizePlayers = (bootstrapData) => {
     secondName: p.second_name,
     webName: p.web_name,
     teamId: p.team,
-    position: ELEMENT_TYLE_MAP[p.element_type],
+    position: ELEMENT_TYPE_MAP[p.element_type],
     price: p.now_cost / 10,
     totalPoints: p.total_points,
     goals: p.goals_scored,
@@ -180,6 +180,7 @@ const syncPlayerGameweekStats=async (gameweekId) =>{
 };
 
 module.exports = {
+normalizeGameweekLiveData,
   syncAll,
   syncPlayerGameweekStats,
   fetchBootstrapStatic,

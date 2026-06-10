@@ -17,6 +17,7 @@ const startScheduler = async () => {
     'syncAll',
     {},
     {
+       jobId: 'sync-all',
       repeat: { every: 6 * 60 * 60 * 1000 },  // ms
       removeOnComplete: 10,
       removeOnFail: 20,
@@ -27,7 +28,7 @@ const startScheduler = async () => {
     'settlement',
     {},
     {
-      jobId: 'sync-all',
+      jobId: 'settlement',
       repeat: { every: 6 * 60 * 60 * 1000 },
       removeOnComplete: 10,
       removeOnFail: 20,

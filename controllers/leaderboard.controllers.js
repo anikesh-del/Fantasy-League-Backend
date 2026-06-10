@@ -7,8 +7,8 @@ async function getGameweekLeaderboard(req,res, next) {
 
         const data= await getLeaderboardServices({
             gameweekId: gameweek , 
-            page:parsedPage,
-            limit: parsedLimit,
+            page,
+            limit
         });
 
         res.status(200).json({
