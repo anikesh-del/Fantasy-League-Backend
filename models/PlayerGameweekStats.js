@@ -7,7 +7,7 @@ const bulkUpsertPlayerGameweekStats=async(stats)=>{
     let placeholders=[];
 
     stats.forEach((s,i)=>{
-        const base=i*11;
+        const base=i*12;
 
         placeholders.push(`(
       $${base+1}, $${base+2}, $${base + 3}, $${base + 4},

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { Worker } = require('bullmq');
 const { syncAll, syncPlayerGameweekStats } = require('../services/stats.sync.services');
 const { getCurrentGameweek } = require('../models/Gameweek');

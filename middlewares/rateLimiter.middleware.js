@@ -8,7 +8,7 @@ function slidingWindowLimiter({
 } = {}) {
 
     return async function slidingWindowMiddleware(req, res, next) {
-        const identifier = req.user?.id || req.ip;
+        const identifier = req.user?.user_id || req.ip;
         const key = `${keyPrefix}:${identifier}`;
         const now = Date.now();
 

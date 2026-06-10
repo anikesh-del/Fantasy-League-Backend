@@ -2,7 +2,7 @@ const axios = require("axios");
 const Team = require("../models/Team");
 const Gameweek = require("../models/Gameweek");
 const Fixture = require("../models/Fixture");
-const { bulkUpsertPlayers } = require("../models/Player");
+const { bulkUpsertPlayers } = require("../models/player");
 const { bulkUpsertPlayerGameweekStats } = require("../models/PlayerGameweekStats");
 const pool = require("../config/db");
 const ApiError = require("../errors/ApiError");
@@ -12,7 +12,7 @@ const FIXTURES_URL = "https://fantasy.premierleague.com/api/fixtures/";
 const GAMEWEEK_LIVE_URL = "https://fantasy.premierleague.com/api/event";
 
 
-const CacheService = require('./cache.service');
+const CacheService = require('./cache.services');
 const KEYS = require('../utils/cacheKeys');
 const TTL = { BOOTSTRAP: 3600, TEAM: 300, LEADERBOARD: 300 };
 

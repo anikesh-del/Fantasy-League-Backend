@@ -19,7 +19,7 @@ const {
 } = require('../controllers/fantasy.controllers');
 
 const { getFantasyTeamPoints }=require("../controllers/points.controller");
-const { getGameweekLeaderboard } = require('../controllers/leaderboard.controller');
+const { getGameweekLeaderboard } = require('../controllers/leaderboard.controllers');
 
 
 router.get("/points",authMiddleware, getFantasyTeamPoints);

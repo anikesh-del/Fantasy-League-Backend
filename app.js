@@ -5,7 +5,7 @@ const app=express();
 const authRouter=require('./routes/auth.routes');
 const fantasyRouter=require('./routes/fantasy.routes');
 const syncRouter = require('./routes/sync.routes');
-const settlementRouter = require('./routes/settlement.routes');
+const settlementRouter = require('./routes/admin.routes');
 const rateLimiter = require('./middlewares/rateLimiter.middleware');
 // const statsRouter=require('./routes/stats.routes');
 

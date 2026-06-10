@@ -1,4 +1,4 @@
-const { getLeaderboardService } = require('../services/leaderboard.services');
+const { getLeaderboardServices } = require('../services/leaderboard.services');
 const ApiError = require('../errors/ApiError');
 
 async function getGameweekLeaderboard(req,res, next) {
@@ -23,7 +23,7 @@ async function getGameweekLeaderboard(req,res, next) {
       }
         }
 
-        const data= await getLeaderboardService({
+        const data= await getLeaderboardServices({
             gameweekId: parsedGameweek , 
             page:parsedPage,
             limit: parsedLimit,

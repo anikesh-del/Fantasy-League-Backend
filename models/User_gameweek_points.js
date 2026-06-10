@@ -52,7 +52,7 @@ const getLeaderboard=async({gameweekId,limit,offset})=>{
     }else{
         query=`
         SELECT 
-        RANK() OVER (ORDER BY ugp.points DESC) AS rank,
+        RANK() OVER (ORDER BY SUM(ugp.points) DESC) AS rank,
         u.username, ft.team_name,
         SUM(ugp.points) AS points
         FROM user_gameweek_points ugp

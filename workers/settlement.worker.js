@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { Worker } = require('bullmq');
 const { settleGameweek } = require('../services/settlement.services');
 

@@ -15,7 +15,6 @@ const client = new Redis({
 
     lazyConnect: true,
 
-     keyPrefix: 'myapp:',  
 });
 
 client.on('connect', () => {
