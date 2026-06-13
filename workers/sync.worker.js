@@ -3,11 +3,7 @@ const { Worker } = require('bullmq');
 const { syncAll, syncPlayerGameweekStats } = require('../services/stats.sync.services');
 const { getCurrentGameweek } = require('../models/Gameweek');
 
-const connection = {
-  host: process.env.REDIS_HOST || 'localhost',
-  port: Number(process.env.REDIS_PORT) || 6379,
-  password: process.env.REDIS_PASSWORD || undefined,
-};
+const connection = require('../config/bullmq-connection');
 
 const syncWorker= new Worker('sync' , async(job)=>{
     if(job.name=='syncAll'){

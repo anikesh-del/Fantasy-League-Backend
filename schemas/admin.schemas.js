@@ -5,7 +5,7 @@ const { z } = require('zod');
 const syncGameweekStatsSchema = z.object({
   body: z.object({}).optional(),
   params: z.object({
-    id: z
+    gameweek_id: z
       .string({ required_error: 'gameweek id is required' })
       .regex(/^\d+$/, 'gameweek id must be a number')
       .transform(val => parseInt(val, 10)),

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { validate } = require('../middlewares/validate.middleware');
+const rateLimiter = require('../middlewares/rateLimiter.middleware');
 const {
   createFantasyTeamSchema,
   addPlayerSchema,
@@ -27,29 +28,29 @@ const {
 const { getFantasyTeamPoints }=require("../controllers/points.controller");
 const { getGameweekLeaderboard } = require('../controllers/leaderboard.controllers');
 
+router.use(authMiddleware);
+router.use(rateLimiter());
 
-router.get("/points",authMiddleware, validate(getPointsSchema),getFantasyTeamPoints);
+router.get("/points", validate(getPointsSchema),getFantasyTeamPoints);
 
-router.get('/leaderboard', authMiddleware,  validate(getLeaderboardSchema), getGameweekLeaderboard);
+router.get('/leaderboard', validate(getLeaderboardSchema), getGameweekLeaderboard);
 
 router
   .route('/team')
-  .post(authMiddleware,
-    validate(createFantasyTeamSchema), createFantasyTeam)
-  .get(authMiddleware, viewFantasyTeam);
+  .post(validate(createFantasyTeamSchema), createFantasyTeam)
+  .get(viewFantasyTeam);
 
-router.post('/team/players', authMiddleware, validate(addPlayerSchema),addPlayer);
+router.post('/team/players', validate(addPlayerSchema),addPlayer);
 
 router.delete(
   '/team/players/:player_api_id',
-  authMiddleware,
   validate(removePlayerSchema),
   removePlayer
 );
 
-router.patch('/team/captain', authMiddleware,
+router.patch('/team/captain',
   validate(updateCaptainSchema), updateCaptain);
 
-router.delete('/team/reset', authMiddleware, resetTeam);
+router.delete('/team/reset', resetTeam);
 
 module.exports = router;

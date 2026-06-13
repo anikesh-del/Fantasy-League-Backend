@@ -20,10 +20,6 @@ const runSync = async (req, res) => {
 const runPlayerGameweekSync = async (req, res) => {
   const { gameweek_id } = req.params;
 
-  if (!gameweek_id || isNaN(gameweek_id)) {
-    throw new ApiError(400, "Invalid gameweek_id");
-  }
-
   const result = await syncPlayerGameweekStats(parseInt(gameweek_id));
 
   res.status(201).json({

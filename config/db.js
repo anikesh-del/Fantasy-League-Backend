@@ -5,6 +5,7 @@ const pool = new Pool({
 });
 
 pool.on("connect",()=>{
+    client.query("SET timezone='UTC'");
     console.log("PostgreSQL connected");
 });
 

@@ -1,8 +1,6 @@
 const { getLeaderboardServices } = require('../services/leaderboard.services');
-const ApiError = require('../errors/ApiError');
 
 async function getGameweekLeaderboard(req,res, next) {
-    try{
         const {gameweek , page, limit}=req.query;
 
         const data= await getLeaderboardServices({
@@ -16,9 +14,8 @@ async function getGameweekLeaderboard(req,res, next) {
             ...data,
         });
 
-    }catch(err){
-        next(err);
-    }
+       next(err);
+    
 }
 
 module.exports = { getGameweekLeaderboard };

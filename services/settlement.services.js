@@ -51,7 +51,7 @@ const settleGameweek = async (gameweek_id) => {
   const allPlayerIds = [...new Set(allTeamPlayers.map(p => p.player_api_id))];
 
   // gameweek stats
-  const gameweekStats = await getGameweekStatsForPlayers(allPlayerIds, game_week_id);
+  const gameweekStats = await getGameweekStatsForPlayers(allPlayerIds, gameweek_id);
 
   //gameweekstats according to player ids
   const statsByPlayerId = {};

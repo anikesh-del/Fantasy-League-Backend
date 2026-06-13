@@ -1,4 +1,4 @@
-const { syncQueue , settlementQueue } = require('../queues');
+const { syncQueue} = require('../queues');
 
 const startScheduler = async () => {
   // Runs every 6 hours — syncs current gameweek player stats
@@ -23,18 +23,6 @@ const startScheduler = async () => {
       removeOnFail: 20,
     }
   );
-
-   await settlementQueue.add(
-    'settlement',
-    {},
-    {
-      jobId: 'settlement',
-      repeat: { every: 6 * 60 * 60 * 1000 },
-      removeOnComplete: 10,
-      removeOnFail: 20,
-    }
-  );
-  console.log('[Scheduler] Sync job scheduled every 6 hours');
 };
 
 module.exports = { startScheduler };

@@ -1,26 +1,23 @@
 const { settleGameweek } = require("../services/settlement.services");
-const ApiError = require("../errors/ApiError");
 const { settlementQueue } = require('../queues');
 
 const runSettlement = async (req, res) => {
   const { gameweek_id } = req.params;
 
-  // Validate gameweek_id parameter
-  if (!gameweek_id || isNaN(gameweek_id)) {
-    throw new ApiError(400, "Invalid gameweek_id parameter");
-  }
-
-  const gameweekId = parseInt(gameweek_id);
-
-  if (gameweekId < 1) {
-    throw new ApiError(400, "Gameweek ID must be a positive number");
-  }
-
   // Call service to settle
-   const job = await settlementQueue.add(
-    'settlement',
-    { gameweekId }
-  );
+  const job = await settlementQueue.add(
+  'settlement',
+  { gameweekId },
+  {
+    attempts: 3,
+    backoff: {
+      type: 'exponential',
+      delay: 5000,  
+    },
+    removeOnComplete: 10,
+    removeOnFail: 20,
+  }
+);
 
   res.status(202).json({
     success: true,

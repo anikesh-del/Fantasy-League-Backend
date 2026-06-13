@@ -12,9 +12,9 @@ if(!result.success){
     throw new ApiError(400, message);
 }
 
- req.body = result.data.body ?? {};
-  req.params = result.data.params ?? {};
-  req.query = result.data.query ?? {};
+ if (result.data.body)   Object.assign(req.body,   result.data.body);
+  if (result.data.params) Object.assign(req.params, result.data.params);
+  if (result.data.query)  Object.assign(req.query,  result.data.query);
 next();
 }
 
