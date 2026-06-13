@@ -10,16 +10,21 @@ const connection = {
 };
 
 const settlementWorker = new Worker('settlement', async (job) => {
+  let gameweekId=job.data?.gameweekId;
 
-  const gw = await getCurrentGameweek();
-  if (!gw) {
+  if(!gameweekId){
+     const gw = await getCurrentGameweek();
+     if (!gw) {
     console.log('[SettlementWorker] No active gameweek');
     return;
   }
+  gameweekId=gw.id;
+  }
+  
 
-  console.log(`[SettlementWorker] Settling GW ${gw.id}...`);
+  console.log(`[SettlementWorker] Settling GW ${gameweekId}...`);
 
-  const result = await settleGameweek(gw.id);
+  const result = await settleGameweek(gameweekId);
   console.log(`[SettlementWorker] Done:`, result);
   return result;
 }, { connection });

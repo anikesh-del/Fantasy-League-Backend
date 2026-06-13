@@ -18,7 +18,7 @@ const runSettlement = async (req, res) => {
 
   // Call service to settle
    const job = await settlementQueue.add(
-    'settle',
+    'settlement',
     { gameweekId }
   );
 
