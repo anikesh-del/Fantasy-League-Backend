@@ -2,7 +2,6 @@ require('dotenv').config();
 const { Worker } = require('bullmq');
 const { syncAll, syncPlayerGameweekStats } = require('../services/stats.sync.services');
 const { getCurrentGameweek } = require('../models/Gameweek');
-const redis = require('../config/redis');
 
 const connection = {
   host: process.env.REDIS_HOST || 'localhost',
