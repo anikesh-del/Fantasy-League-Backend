@@ -1,4 +1,3 @@
-const { settleGameweek } = require("../services/settlement.services");
 const { settlementQueue } = require('../queues');
 
 const runSettlement = async (req, res) => {
@@ -7,7 +6,7 @@ const runSettlement = async (req, res) => {
   // Call service to settle
   const job = await settlementQueue.add(
   'settlement',
-  { gameweekId },
+  { gameweekId:gameweek_id },
   {
     attempts: 3,
     backoff: {

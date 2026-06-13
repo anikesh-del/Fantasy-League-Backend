@@ -3,8 +3,6 @@ const { getLeaderboard, getLeaderboardCount } = require('../models/User_gameweek
 const CacheService = require('./cache.services');
 const KEYS = require('../utils/cacheKeys');
 
-const APIError = require('../errors/ApiError');
-
 async function getLeaderboardServices({ gameweekId, page, limit }) {
   const offset = (page - 1) * limit;
 

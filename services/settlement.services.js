@@ -89,7 +89,7 @@ const settleGameweek = async (gameweek_id) => {
     userGameweekData.push({
       user_id: user.user_id,
       fantasy_team_id: user.fantasy_team_id,
-      gameweek: game_week_id,
+      gameweek: gameweek_id,
       points: totalPoints,
     });
   }

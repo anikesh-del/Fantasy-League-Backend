@@ -13,8 +13,6 @@ async function getGameweekLeaderboard(req,res, next) {
             success:true,
             ...data,
         });
-
-       next(err);
     
 }
 

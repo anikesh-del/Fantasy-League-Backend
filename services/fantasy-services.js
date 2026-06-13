@@ -72,7 +72,7 @@ const getFantasyTeam = async (userId) => {
 
 };
 
-const addPlayer = async ({ userId, player_api_id, position }) => {
+const addPlayer = async ({ userId, player_api_id}) => {
 
   //checking if the team actually exist
   const team = await FantasyTeam.getTeamByUserId(userId);
@@ -86,7 +86,7 @@ const addPlayer = async ({ userId, player_api_id, position }) => {
   const player = await Player.getPlayerById(player_api_id);
   if (!player) throw new ApiError(404, 'Player not found');
 
-
+  const position = player.position;
 
   //getting the summary 
   const squad = await FantasyTeamPlayer.getSquadSummary(team.fantasy_team_id);

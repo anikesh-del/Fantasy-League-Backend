@@ -7,10 +7,6 @@ body:z.object({
     .number({ required_error: 'player_api_id is required' })
     .int('player_api_id must be an integer')
     .positive('player_api_id must be positive'),
-
-    position: z.enum(['GKP','DEF','MID','FWD'],{
-        errorMap:()=>({message:'position must be one of : GKP , DEF,MID , FWD'}),
-    }),
 }),
 params:z.object({}).optional(),
 query:z.object({}).optional(),

@@ -28,12 +28,11 @@ const viewFantasyTeam = async (req, res) => {
 
 const addPlayer = async (req, res) => {
   const userId = req.user.user_id;
-  const { player_api_id, position } = req.body;
+  const { player_api_id} = req.body;
 
   const player = await fantasyService.addPlayer({
     userId,
     player_api_id,
-    position,
   });
 
   res.status(201).json({
