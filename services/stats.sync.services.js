@@ -94,19 +94,21 @@ const normalizeFixtures = (fixturesData) => {
 };
 
 const normalizeGameweekLiveData=(elements, gameweekId)=>{
-  return elements.map((el)=>({
+  return elements
+  .filter((el) => el.stats) 
+  .map((el)=>({
     playerId: el.id,
-    gameweekId: gameweekId,
-    minutes: el.stats.minutes,
-    goals: el.stats.goals_scored,
-    assists: el.stats.assists,
-    cleanSheets: el.stats.clean_sheets,
-    goalsConceded: el.stats.goals_conceded,
-    yellowCards: el.stats.yellow_cards,
-    redCards: el.stats.red_cards,
-    saves: el.stats.saves,
-    bonus: el.stats.bonus ?? 0,
-    totalPoints: el.stats.total_points,
+      gameweekId: gameweekId,
+      minutes: el.stats.minutes ?? 0,
+      goals: el.stats.goals_scored ?? 0,
+      assists: el.stats.assists ?? 0,
+      cleanSheets: el.stats.clean_sheets ?? 0,
+      goalsConceded: el.stats.goals_conceded ?? 0,
+      yellowCards: el.stats.yellow_cards ?? 0,
+      redCards: el.stats.red_cards ?? 0,
+      saves: el.stats.saves ?? 0,
+      bonus: el.stats.bonus ?? 0,
+      totalPoints: el.stats.total_points ?? 0,
   }));
 };
 //Main sync 
