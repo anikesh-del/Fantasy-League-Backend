@@ -8,7 +8,7 @@ const validate=(schema)=>(req,res,next)=>{
 });
 
 if(!result.success){
-    const message=result.error.errors.map(e=>e.message).join(',');
+    const message=result.error.issues.map(e=>e.message).join(',');
     throw new ApiError(400, message);
 }
 

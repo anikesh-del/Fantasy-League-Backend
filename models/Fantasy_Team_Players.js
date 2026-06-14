@@ -71,12 +71,11 @@ const updateCaptainsTransaction = async ({ fantasy_team_id, captain_id, vice_cap
     if (captain_id && vice_captain_id && captain_id === vice_captain_id)
       throw new ApiError(400, 'Captain and vice captain cannot be the same player');
 
-    await client.query(
-      `UPDATE fantasy_team_players SET is_captain = FALSE, is_vice_captain = FALSE
-       WHERE fantasy_team_id = $1`,
-      [fantasy_team_id]
-    );
-    if (captain_id) {
+      if (captain_id) {
+      await client.query(
+        `UPDATE fantasy_team_players SET is_captain = FALSE WHERE fantasy_team_id = $1`,
+        [fantasy_team_id]
+      );
       await client.query(
         `UPDATE fantasy_team_players SET is_captain = TRUE
          WHERE fantasy_team_id = $1 AND player_api_id = $2`,
@@ -85,12 +84,16 @@ const updateCaptainsTransaction = async ({ fantasy_team_id, captain_id, vice_cap
     }
     if (vice_captain_id) {
       await client.query(
+        `UPDATE fantasy_team_players SET is_vice_captain = FALSE WHERE fantasy_team_id = $1`,
+        [fantasy_team_id]
+      );
+      await client.query(
         `UPDATE fantasy_team_players SET is_vice_captain = TRUE
          WHERE fantasy_team_id = $1 AND player_api_id = $2`,
         [fantasy_team_id, vice_captain_id]
       );
     }
-
+    
     await client.query('COMMIT');
   } catch (err) {
     await client.query('ROLLBACK');

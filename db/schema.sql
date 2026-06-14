@@ -257,6 +257,14 @@ ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.u
 
 
 --
+-- Name: fantasy_team fantasy_team_one_per_user; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.fantasy_team
+    ADD CONSTRAINT fantasy_team_one_per_user UNIQUE (user_id);
+
+
+--
 -- Name: fantasy_team fantasy_team_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -568,4 +576,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20260402205630'),
     ('20260402205716'),
     ('20260402205748'),
-    ('20260402211718');
+    ('20260402211718'),
+    ('20260614025000');
