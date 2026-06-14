@@ -15,9 +15,11 @@ const addPlayer = async ({ fantasy_team_id, player_api_id, position }) => {
 const removePlayer = async ({ fantasy_team_id, player_api_id }) => {
   const query = `
     DELETE FROM fantasy_team_players
-    WHERE fantasy_team_id = $1 AND player_api_id = $2;
+    WHERE fantasy_team_id = $1 AND player_api_id = $2
+    RETURNING player_api_id;
   `;
-  await pool.query(query, [fantasy_team_id, player_api_id]);
+  const result = await pool.query(query, [fantasy_team_id, player_api_id]);
+  return result.rowCount;
 };
 
 const getPlayersByTeam = async (fantasy_team_id) => {

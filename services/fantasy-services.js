@@ -72,7 +72,7 @@ const getFantasyTeam = async (userId) => {
 
 };
 
-const addPlayer = async ({ userId, player_api_id}) => {
+const addPlayer = async ({ userId, player_api_id }) => {
 
   //checking if the team actually exist
   const team = await FantasyTeam.getTeamByUserId(userId);
@@ -117,7 +117,7 @@ const addPlayer = async ({ userId, player_api_id}) => {
     throw new ApiError(400, `Over budget: adding this player exceeds £100m`);
   }
 
-  const result= await FantasyTeamPlayer.addPlayer({
+  const result = await FantasyTeamPlayer.addPlayer({
     fantasy_team_id: team.fantasy_team_id,
     player_api_id,
     position,
@@ -134,11 +134,11 @@ const removePlayer = async ({ userId, player_api_id }) => {
   }
   await checkDeadline();
 
-  await FantasyTeamPlayer.removePlayer({
+  const rowCount = await FantasyTeamPlayer.removePlayer({
     fantasy_team_id: team.fantasy_team_id,
     player_api_id,
   });
-
+  if (rowCount === 0) throw new ApiError(404, "Player not in team");
   await CacheService.del(KEYS.fantasyTeam(userId));
 };
 

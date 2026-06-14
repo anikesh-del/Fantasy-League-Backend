@@ -44,12 +44,17 @@ const updateCaptainSchema = z.object({
     captain_id: z
       .number({ required_error: 'captain_id is required' })
       .int('captain_id must be an integer')
-      .positive('captain_id must be positive'),
+      .positive('captain_id must be positive')
+      .optional(),
     vice_captain_id: z
       .number({ required_error: 'vice_captain_id is required' })
       .int('vice_captain_id must be an integer')
-      .positive('vice_captain_id must be positive'),
-  }),
+      .positive('vice_captain_id must be positive')
+      .optional(),
+  }).refine(
+    data => data.captain_id !== undefined || data.vice_captain_id !== undefined,
+    { message: 'At least one of captain_id or vice_captain_id is required' }
+  ),
   params: z.object({}).optional(),
   query: z.object({}).optional(),
 });

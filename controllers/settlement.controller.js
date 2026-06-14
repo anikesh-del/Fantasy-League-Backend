@@ -20,7 +20,7 @@ const runSettlement = async (req, res) => {
 
   res.status(202).json({
     success: true,
-    message: `Settlement job queued for GW ${gameweekId}`,
+    message: `Settlement job queued for GW ${gameweek_id}`,
     jobId: job.id,
   });
 };

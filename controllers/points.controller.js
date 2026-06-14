@@ -6,7 +6,7 @@ const getFantasyTeamPoints = async (req, res) => {
   const { gameweek } = req.query;
 
   // Delegate to service
-  const result = await getFantasyTeamPointsForUser(userId, gameweekId);
+  const result = await getFantasyTeamPointsForUser(userId, gameweek);
 
   res.status(200).json({
     success: true,

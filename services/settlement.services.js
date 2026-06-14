@@ -83,7 +83,7 @@ const settleGameweek = async (gameweek_id) => {
         finalPoints = basePoints * 1.5;
       }
 
-      totalPoints += finalPoints;
+      totalPoints += Math.round(finalPoints);
     }
 
     userGameweekData.push({

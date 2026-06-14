@@ -39,7 +39,7 @@ const calculateFantasyTeamPoints = async (fantasy_team_id, gameweek_id) => {
       finalPoints = basePoints * 2;
     } else if (teamPlayer.is_vice_captain && captainDidntPlay && basePoints > 0) {
       multiplier = 1.5;
-      finalPoints = basePoints * 1.5;
+      finalPoints = Math.round(basePoints * 1.5);
     }
 
     totalPoints += finalPoints;
@@ -48,7 +48,7 @@ const calculateFantasyTeamPoints = async (fantasy_team_id, gameweek_id) => {
       player_id: teamPlayer.player_api_id,
       base_points: basePoints,
       multiplier: multiplier,
-      final_points: finalPoints,
+      final_points: Math.round(finalPoints),
       is_captain: teamPlayer.is_captain || false,
       is_vice_captain: teamPlayer.is_vice_captain || false,
       minutes: playerStats ? playerStats.minutes : 0,
