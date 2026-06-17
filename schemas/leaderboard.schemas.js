@@ -12,17 +12,16 @@ const getLeaderboardSchema = z.object({
       .transform(val => parseInt(val, 10))
       .refine(val => val > 0, 'gameweek must be a positive integer')
       .optional(),
-    page: z
-      .string()
-      .regex(/^\d+$/, 'page must be a number')
-      .transform(val => parseInt(val, 10))
-      .refine(val => val > 0, 'page must be a positive integer')
+    page: z.coerce
+      .number({ invalid_type_error: 'page must be a number' })
+      .int('page must be an integer')
+      .positive('page must be a positive integer')
       .default(1),
-    limit: z
-      .string()
-      .regex(/^\d+$/, 'limit must be a number')
-      .transform(val => parseInt(val, 10))
-      .refine(val => val > 0 && val <= 100, 'limit must be between 1 and 100')
+    limit: z.coerce
+      .number({ invalid_type_error: 'limit must be a number' })
+      .int('limit must be an integer')
+      .min(1, 'limit must be between 1 and 100')
+      .max(100, 'limit must be between 1 and 100')
       .default(50),
   }),
 });

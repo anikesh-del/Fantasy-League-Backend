@@ -1,26 +1,23 @@
 const { syncQueue} = require('../queues');
 
 const startScheduler = async () => {
-  // Runs every 6 hours — syncs current gameweek player stats
-  await syncQueue.add(
-    'syncCurrentGameweek',
-    {},
+  await syncQueue.upsertJobScheduler(
+    'sync-current-gameweek',
+    { every: 6 * 60 * 60 * 1000 },
     {
-      jobId: 'sync-current-gameweek',
-      repeat: { every: 6 * 60 * 60 * 1000 },  // ms
-      removeOnComplete: 10,
-      removeOnFail: 20,
+      name: 'syncCurrentGameweek',
+      data: {},
+      opts: { removeOnComplete: 10, removeOnFail: 20 },
     }
   );
 
-  await syncQueue.add(
-    'syncAll',
-    {},
+  await syncQueue.upsertJobScheduler(
+    'sync-all',
+    { every: 6 * 60 * 60 * 1000 },
     {
-       jobId: 'sync-all',
-      repeat: { every: 6 * 60 * 60 * 1000 },  // ms
-      removeOnComplete: 10,
-      removeOnFail: 20,
+      name: 'syncAll',
+      data: {},
+      opts: { removeOnComplete: 10, removeOnFail: 20 },
     }
   );
 };
