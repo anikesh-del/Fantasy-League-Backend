@@ -11,7 +11,15 @@ const authMiddleware = async (req, res, next) => {
     }
 
     const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      if (err.name === 'TokenExpiredError') {
+        throw new ApiError(401, "Token has expired");
+      }
+      throw new ApiError(401, "Invalid token");
+    }
 
     const user = await User.findUserById(decoded.userId);
     if (!user) {
