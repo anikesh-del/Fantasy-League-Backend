@@ -1,7 +1,8 @@
 const pool=require("../config/db")
 
 const bulkInsertUserGameweekPoints= async(userGameweekData)=>{
-
+    if (!userGameweekData || userGameweekData.length === 0) return;
+    
     const values =[];
     const placeholder=[];
  
