@@ -73,14 +73,13 @@ const getFantasyTeam = async (userId) => {
 };
 
 const addPlayer = async ({ userId, player_api_id }) => {
-
   //checking if the team actually exist
   const team = await FantasyTeam.getTeamByUserId(userId);
   if (!team) {
     throw new ApiError(404, "Fantasy team not found");
   }
 
-  await checkDeadline();
+  // await checkDeadline();
 
   //checking if the player actually exists or not
   const player = await Player.getPlayerById(player_api_id);
@@ -132,7 +131,7 @@ const removePlayer = async ({ userId, player_api_id }) => {
   if (!team) {
     throw new ApiError(404, "Fantasy team not found");
   }
-  await checkDeadline();
+  // await checkDeadline();
 
   const rowCount = await FantasyTeamPlayer.removePlayer({
     fantasy_team_id: team.fantasy_team_id,
