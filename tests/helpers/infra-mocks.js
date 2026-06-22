@@ -1,9 +1,10 @@
 const mockQuery = jest.fn();
- 
+const mockConnect = jest.fn();
+
 jest.mock('pg', () => ({
   Pool: jest.fn(() => ({
     query: mockQuery,
-    connect: jest.fn(),
+    connect: mockConnect,
     on: jest.fn(),
   })),
 }));
@@ -31,4 +32,4 @@ jest.mock('bullmq', () => ({
 }));
  
 
-module.exports = { mockQuery };
+module.exports = { mockQuery,mockConnect };

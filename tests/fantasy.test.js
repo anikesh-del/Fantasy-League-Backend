@@ -1,4 +1,4 @@
-const { mockQuery } = require('./helpers/infra-mocks');
+const { mockQuery, mockConnect } = require('./helpers/infra-mocks');
  
 const request = require('supertest');
 const app = require('../app');
@@ -67,19 +67,17 @@ describe('POST /api/v1/fantasy/team/players', () => {
  
   it('rejects adding a player once the squad has 15 players', async () => {
     mockAuthUser();
-    mockQuery
+       mockQuery
       .mockResolvedValueOnce({ rows: [testTeam] })
       .mockResolvedValueOnce({ rows: [{ deadline_time: futureDeadline }] })
       .mockResolvedValueOnce({ rows: [{ id: 301, price: '6.0', position: 'MID' }] })
-      .mockResolvedValueOnce({ rows: [{
-        total_players: '15', total_cost: '95.0',
-        gkp_count: '2', def_count: '5', mid_count: '5', fwd_count: '3',
-      }] });
+      .mockResolvedValueOnce({ rows: [{ total_players: '15', total_cost: '95.0', gkp_count: '2', def_count: '5', mid_count: '5', fwd_count: '3' }] })
+      .mockResolvedValueOnce({ rows: [] }); 
  
     const res = await request(app)
       .post(`${BASE}/team/players`)
       .set(auth)
-      .send({ player_api_id: 301 });
+      .send({ player_api_id: 301});
  
     expect(res.status).toBe(400);
     expect(res.body.error.message).toMatch(/squad is full/i);
@@ -91,10 +89,8 @@ describe('POST /api/v1/fantasy/team/players', () => {
       .mockResolvedValueOnce({ rows: [testTeam] })
       .mockResolvedValueOnce({ rows: [{ deadline_time: futureDeadline }] })
       .mockResolvedValueOnce({ rows: [{ id: 301, price: '15.0', position: 'MID' }] })
-      .mockResolvedValueOnce({ rows: [{
-        total_players: '5', total_cost: '90.0',
-        gkp_count: '1', def_count: '2', mid_count: '1', fwd_count: '1',
-      }] });
+      .mockResolvedValueOnce({ rows: [{ total_players: '5', total_cost: '90.0', gkp_count: '1', def_count: '2', mid_count: '1', fwd_count: '1' }] })
+      .mockResolvedValueOnce({ rows: [] });
  
     const res = await request(app)
       .post(`${BASE}/team/players`)
@@ -111,15 +107,13 @@ describe('POST /api/v1/fantasy/team/players', () => {
       .mockResolvedValueOnce({ rows: [testTeam] })
       .mockResolvedValueOnce({ rows: [{ deadline_time: futureDeadline }] })
       .mockResolvedValueOnce({ rows: [{ id: 301, price: '4.5', position: 'GKP' }] })
-      .mockResolvedValueOnce({ rows: [{
-        total_players: '10', total_cost: '70.0',
-        gkp_count: '2', def_count: '4', mid_count: '3', fwd_count: '1',
-      }] });
+      .mockResolvedValueOnce({ rows: [{ total_players: '10', total_cost: '70.0', gkp_count: '2', def_count: '4', mid_count: '3', fwd_count: '1' }] })
+      .mockResolvedValueOnce({ rows: [] });
  
     const res = await request(app)
       .post(`${BASE}/team/players`)
       .set(auth)
-      .send({ player_api_id: 301 });
+      .send({ player_api_id: 303 });
  
     expect(res.status).toBe(400);
     expect(res.body.error.message).toMatch(/position full/i);
