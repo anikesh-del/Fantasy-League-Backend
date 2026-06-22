@@ -1,8 +1,8 @@
 // services/settlement.services.js
 
 const { calculateFantasyTeamPoints } = require("./points.services");
-const { bulkInsertUserGameweekPoints } = require("../models/User_gameweek_points");
-const { getGameweekStatsForPlayers } = require("../models/PlayerGameweekStats");
+const UserGameweekPoints = require("../models/User_gameweek_points");
+const PlayerGameweekStats = require("../models/PlayerGameweekStats");
 const pool = require("../config/db");
 const ApiError = require("../errors/ApiError");
 const CacheService = require('./cache.services');
@@ -51,7 +51,11 @@ const settleGameweek = async (gameweek_id) => {
   const allPlayerIds = [...new Set(allTeamPlayers.map(p => p.player_api_id))];
 
   // gameweek stats
-  const gameweekStats = await getGameweekStatsForPlayers(allPlayerIds, gameweek_id);
+ const gameweekStats =
+  await PlayerGameweekStats.getGameweekStatsForPlayers(
+    allPlayerIds,
+    gameweek_id
+  );
 
   //gameweekstats according to player ids
   const statsByPlayerId = {};
@@ -95,7 +99,7 @@ const settleGameweek = async (gameweek_id) => {
   }
 
   if (userGameweekData.length > 0) {
-    await bulkInsertUserGameweekPoints(userGameweekData);
+    await UserGameweekPoints.bulkInsertUserGameweekPoints(userGameweekData);
   }
 
   await CacheService.delPattern('leaderboard:*');

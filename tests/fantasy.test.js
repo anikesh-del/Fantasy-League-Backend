@@ -1,4 +1,4 @@
-const { mockQuery, mockConnect } = require('./helpers/infra-mocks');
+const { mockQuery, mockConnect, mockPoolInstance } = require('./helpers/infra-mocks');
  
 const request = require('supertest');
 const app = require('../app');
@@ -138,11 +138,10 @@ describe('POST /api/v1/fantasy/team/players', () => {
 describe('PATCH /api/v1/fantasy/team/captain', () => {
   
   const mockTransactionClient = (queryResponses) => {
-    const pg = require('pg');
-    const client = { query: jest.fn(), release: jest.fn() };
-    queryResponses.forEach((r) => client.query.mockResolvedValueOnce(r));
-    pg.Pool.mock.results[0].value.connect = jest.fn().mockResolvedValue(client);
-  };
+  const client = { query: jest.fn(), release: jest.fn() };
+  queryResponses.forEach((r) => client.query.mockResolvedValueOnce(r));
+  mockPoolInstance.connect = jest.fn().mockResolvedValue(client);
+};
  
   it('sets a captain who is in the squad', async () => {
     mockAuthUser();
