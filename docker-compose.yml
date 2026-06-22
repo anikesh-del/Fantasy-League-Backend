@@ -1,0 +1,78 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: fantasy-postgres
+
+    restart: unless-stopped
+
+    environment:
+       POSTGRES_USER: fantasy_user
+       POSTGRES_PASSWORD: fantasy_password
+       POSTGRES_DB: fantasy_db
+
+    ports:
+      -"5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fantasy_user -d fantasy_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - fantasy-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: fantasy-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - fantasy-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      tiemout: 3s
+      retries: 5
+  
+  app:
+    build:
+       context: .
+       dockerfile: Dockerfile
+
+    container_name: fantasy-backend
+
+    restart: unless-stopped
+
+    ports:
+       - "5000:5000"
+    
+    env_file:
+       - .env
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:5000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+    networks:
+      - fantasy-network
+
+networks:
+  fantasy-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:

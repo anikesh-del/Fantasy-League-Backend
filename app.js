@@ -9,12 +9,13 @@ const syncRouter = require('./routes/sync.routes');
 const settlementRouter = require('./routes/admin.routes');
 const rateLimiter = require('./middlewares/rateLimiter.middleware');
 // const statsRouter=require('./routes/stats.routes');
-
+const healthRoutes = require("./routes/health.routes");
 const errorHandler=require('./middlewares/error.middleware');
 
 app.use(helmet());
 app.use(express.json());
 
+app.use(healthRoutes);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/fantasy',fantasyRouter);
 app.use('/api/v1/admin/sync',syncRouter);
