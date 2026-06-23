@@ -11,7 +11,7 @@ services:
        POSTGRES_DB: fantasy_db
 
     ports:
-      -"5432:5432"
+      - "5432:5432"
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -36,7 +36,7 @@ services:
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
-      tiemout: 3s
+      timeout: 3s
       retries: 5
   
   app:
